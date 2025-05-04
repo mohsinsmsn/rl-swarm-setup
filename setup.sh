@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# Update system packages
+sudo apt update && sudo apt install -y python3 python3-venv python3-pip curl wget screen git lsof
+
+# Install Node.js
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - && sudo apt update && sudo apt install -y nodejs
+
+# Add Yarn package repository and install Yarn
+curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | sudo tee /usr/share/keyrings/yarnkey.gpg > /dev/null
+echo "deb [signed-by=/usr/share/keyrings/yarnkey.gpg] https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+sudo apt update && sudo apt install -y yarn
+
+# Clone the rl-swarm repository
+git clone https://github.com/gensyn-ai/rl-swarm.git
+
+# Start a new screen session
+screen -S gensyn
+
+# Navigate to the rl-swarm directory
+cd rl-swarm
+
+# Create a Python virtual environment and activate it
+python3 -m venv .venv
+source .venv/bin/activate
+
+# Navigate to modal-login directory and install dependencies
+cd modal-login
+yarn install
+
+# Upgrade Yarn packages and add specific versions
+yarn upgrade && yarn add next@latest && yarn add viem@latest
+
+# Go back and run the training script
+cd ..
+./run_rl_swarm.sh
