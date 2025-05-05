@@ -3,6 +3,14 @@
 # Update system packages
 sudo apt update && sudo apt install -y python3 python3-venv python3-pip curl wget screen git lsof
 
+#install ufw
+sudo apt install ufw -y
+sudo ufw allow 22
+sudo ufw allow 3000/tcp
+sudo ufw enable
+wget -q https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
+sudo dpkg -i cloudflared-linux-amd64.deb
+
 # Install Node.js
 curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - && sudo apt update && sudo apt install -y nodejs
 
@@ -33,4 +41,4 @@ yarn upgrade && yarn add next@latest && yarn add viem@latest
 
 # Go back and run the training script
 cd ..
-./run_rl_swarm.sh
+#./run_rl_swarm.sh
