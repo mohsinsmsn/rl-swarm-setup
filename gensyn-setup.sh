@@ -35,6 +35,6 @@ yarn install &&
 yarn upgrade &&
 yarn add next@latest &&
 yarn add viem@latest &&
-cd .. &&
-./run_rl_swarm.sh <<< \$'Y\nA\n7'
+cd .. 
+#./run_rl_swarm.sh <<< \$'Y\nA\n7'
 "
