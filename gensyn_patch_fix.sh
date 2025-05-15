@@ -2,22 +2,30 @@
 
 echo "🔧 Fixing batch size and training settings in grp*.yaml..."
 
-cd "$HOME/rl-swarm/hivemind_exp/configs/mac/" || {
-  echo "❌ Could not navigate to yaml config directory."
-  exit 1
-}
+CONFIG_DIR="$HOME/rl-swarm/hivemind_exp/configs/mac"
+PATCHED_KEYS=(
+  "torch_dtype: float32"
+  "bf16: false"
+  "tf32: false"
+  "gradient_checkpointing: false"
+  "per_device_train_batch_size: 1"
+)
 
-# Update values in all grp*.yaml files
-for file in grp*.yaml; do
-  echo "📁 Processing $file..."
-  sed -i 's/torch_dtype:.*/torch_dtype: float32/' "$file"
-  sed -i 's/bf16:.*/bf16: false/' "$file"
-  sed -i 's/tf32:.*/tf32: false/' "$file"
-  sed -i 's/gradient_checkpointing:.*/gradient_checkpointing: false/' "$file"
-  sed -i 's/per_device_train_batch_size:.*/per_device_train_batch_size: 1/' "$file"
+for yaml_file in "$CONFIG_DIR"/grp*.yaml; do
+  echo "📁 Processing $(basename "$yaml_file")..."
+
+  # Replace or append each key
+  for key in "${PATCHED_KEYS[@]}"; do
+    key_name=$(echo "$key" | cut -d: -f1)
+    if grep -q "^$key_name:" "$yaml_file"; then
+      sed -i "s|^$key_name:.*|$key|" "$yaml_file"
+    else
+      echo "$key" >> "$yaml_file"
+    fi
+  done
+
+  echo "✅ Batch config patch completed."
 done
-
-echo "✅ Batch config patch completed."
 
 echo ""
 echo "🔧 Replacing page.tsx file with patched version from GitHub..."
