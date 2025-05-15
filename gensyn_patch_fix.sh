@@ -19,32 +19,40 @@ done
 
 echo "✅ Batch config patch completed."
 
-TARGET_FILE="$HOME/rl-swarm/modal-login/app/page.tsx"
+PAGE_FILE="$HOME/rl-swarm/modal-login/app/page.tsx"
 
-USE_EFFECT_BLOCK='  useEffect(() => {
+if [[ ! -f "$PAGE_FILE" ]]; then
+  echo "❌ Error: File not found at $PAGE_FILE"
+  exit 1
+fi
+
+# The block to insert
+INSERT_BLOCK='
+  useEffect(() => {
     if (!user && !signerStatus.isInitializing) {
       openAuthModal();
     }
   }, [user, signerStatus.isInitializing]);
-
 '
 
-echo "🔧 Checking if auth-modal useEffect is already placed before return()..."
-
-# Check only lines near `return` block to see if patch was already inserted
-if awk '/^  return \(/ { found_return=1 } found_return && /openAuthModal\(\)/ { found_patch=1 } END { exit !found_patch }' "$TARGET_FILE"; then
-  echo "ℹ️ useEffect near return already present. Skipping insertion."
-else
-  echo "✍️ Inserting useEffect near return block..."
-  awk -v insert="$USE_EFFECT_BLOCK" '
-    BEGIN { inserted = 0 }
-    {
-      if (!inserted && $0 ~ /^  return \(/) {
-        print insert;
-        inserted = 1;
-      }
-      print $0;
-    }
-  ' "$TARGET_FILE" > "${TARGET_FILE}.tmp" && mv "${TARGET_FILE}.tmp" "$TARGET_FILE"
-  echo "✅ useEffect inserted successfully before return block."
+# Check if it's already present
+if grep -q 'if (!user && !signerStatus.isInitializing)' "$PAGE_FILE"; then
+  echo "ℹ️ useEffect block already inserted. Skipping."
+  exit 0
 fi
+
+# Insert after the crypto.subtle block
+awk -v insert="$INSERT_BLOCK" '
+/typeof window.crypto.subtle !== "object"/ {
+  found = 1
+}
+found && /\}\), \[\]\);/ {
+  print $0
+  print insert
+  found = 0
+  next
+}
+{ print $0 }
+' "$PAGE_FILE" > "${PAGE_FILE}.tmp" && mv "${PAGE_FILE}.tmp" "$PAGE_FILE"
+
+echo "✅ useEffect block inserted after crypto check."
