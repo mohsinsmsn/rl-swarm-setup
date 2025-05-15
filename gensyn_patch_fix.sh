@@ -19,40 +19,17 @@ done
 
 echo "✅ Batch config patch completed."
 
-PAGE_FILE="$HOME/rl-swarm/modal-login/app/page.tsx"
+echo ""
+echo "🔧 Replacing page.tsx file with patched version from GitHub..."
 
-if [[ ! -f "$PAGE_FILE" ]]; then
-  echo "❌ Error: File not found at $PAGE_FILE"
-  exit 1
+PAGE_PATH="$HOME/rl-swarm/modal-login/app/page.tsx"
+curl -fsSL https://raw.githubusercontent.com/mohsinsmsn/rl-swarm-setup/refs/heads/main/page.tsx -o "$PAGE_PATH"
+
+if [ $? -eq 0 ]; then
+  echo "✅ page.tsx replaced successfully."
+else
+  echo "❌ Failed to download page.tsx from GitHub."
 fi
 
-# The block to insert
-INSERT_BLOCK='
-  useEffect(() => {
-    if (!user && !signerStatus.isInitializing) {
-      openAuthModal();
-    }
-  }, [user, signerStatus.isInitializing]);
-'
-
-# Check if it's already present
-if grep -q 'if (!user && !signerStatus.isInitializing)' "$PAGE_FILE"; then
-  echo "ℹ️ useEffect block already inserted. Skipping."
-  exit 0
-fi
-
-# Insert after the crypto.subtle block
-awk -v insert="$INSERT_BLOCK" '
-/typeof window.crypto.subtle !== "object"/ {
-  found = 1
-}
-found && /\}\), \[\]\);/ {
-  print $0
-  print insert
-  found = 0
-  next
-}
-{ print $0 }
-' "$PAGE_FILE" > "${PAGE_FILE}.tmp" && mv "${PAGE_FILE}.tmp" "$PAGE_FILE"
-
-echo "✅ useEffect block inserted after crypto check."
+echo ""
+echo "🎉 All patches applied successfully."
