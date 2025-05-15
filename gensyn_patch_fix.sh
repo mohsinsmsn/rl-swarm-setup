@@ -19,8 +19,6 @@ done
 
 echo "✅ Batch config patch completed."
 
-echo "🔧 Inserting useEffect to open auth modal in page.tsx..."
-
 TARGET_FILE="$HOME/rl-swarm/modal-login/app/page.tsx"
 
 USE_EFFECT_BLOCK='  useEffect(() => {
@@ -31,24 +29,22 @@ USE_EFFECT_BLOCK='  useEffect(() => {
 
 '
 
-# Check if it's already been inserted
-if grep -q 'openAuthModal();' "$TARGET_FILE"; then
-  echo "ℹ️ useEffect already present, skipping insertion."
-else
-  echo "🔧 Patching page.tsx before return block..."
+echo "🔧 Checking if auth-modal useEffect is already placed before return()..."
 
+# Check only lines near `return` block to see if patch was already inserted
+if awk '/^  return \(/ { found_return=1 } found_return && /openAuthModal\(\)/ { found_patch=1 } END { exit !found_patch }' "$TARGET_FILE"; then
+  echo "ℹ️ useEffect near return already present. Skipping insertion."
+else
+  echo "✍️ Inserting useEffect near return block..."
   awk -v insert="$USE_EFFECT_BLOCK" '
     BEGIN { inserted = 0 }
     {
-      if (!inserted && $0 ~ /^  return \($/) {
+      if (!inserted && $0 ~ /^  return \(/) {
         print insert;
         inserted = 1;
       }
       print $0;
     }
   ' "$TARGET_FILE" > "${TARGET_FILE}.tmp" && mv "${TARGET_FILE}.tmp" "$TARGET_FILE"
-
-  echo "✅ Patch inserted successfully before return block."
+  echo "✅ useEffect inserted successfully before return block."
 fi
-
-echo "🎉 All patches applied successfully."
