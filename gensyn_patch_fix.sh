@@ -21,21 +21,34 @@ echo "✅ Batch config patch completed."
 
 echo "🔧 Inserting useEffect to open auth modal in page.tsx..."
 
-PAGE_FILE="$HOME/rl-swarm/modal-login/app/page.tsx"
+TARGET_FILE="$HOME/rl-swarm/modal-login/app/page.tsx"
 
-# Only insert if not already present
-if ! grep -q 'openAuthModal();' "$PAGE_FILE"; then
-  awk '
-  /return\s*\(/ && !patched {
-    print "  useEffect(() => {\n    if (!user && !signerStatus.isInitializing) {\n      openAuthModal();\n    }\n  }, [user, signerStatus.isInitializing]);\n"
-    patched=1
-  }
-  { print }
-  ' "$PAGE_FILE" > "${PAGE_FILE}.tmp" && mv "${PAGE_FILE}.tmp" "$PAGE_FILE"
+USE_EFFECT_BLOCK='  useEffect(() => {
+    if (!user && !signerStatus.isInitializing) {
+      openAuthModal();
+    }
+  }, [user, signerStatus.isInitializing]);
 
-  echo "✅ useEffect inserted into page.tsx"
+'
+
+# Check if it's already been inserted
+if grep -q 'openAuthModal();' "$TARGET_FILE"; then
+  echo "ℹ️ useEffect already present, skipping insertion."
 else
-  echo "ℹ️ useEffect already exists in page.tsx, skipping."
+  echo "🔧 Patching page.tsx before return block..."
+
+  awk -v insert="$USE_EFFECT_BLOCK" '
+    BEGIN { inserted = 0 }
+    {
+      if (!inserted && $0 ~ /^  return \($/) {
+        print insert;
+        inserted = 1;
+      }
+      print $0;
+    }
+  ' "$TARGET_FILE" > "${TARGET_FILE}.tmp" && mv "${TARGET_FILE}.tmp" "$TARGET_FILE"
+
+  echo "✅ Patch inserted successfully before return block."
 fi
 
 echo "🎉 All patches applied successfully."
