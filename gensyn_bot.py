@@ -294,7 +294,7 @@ def main():
     app.add_handler(CommandHandler("remove", remove_command))
     app.add_handler(CommandHandler("broadcast", broadcast_command))
 
-    app.job_queue.run_repeating(monitor_scores, interval=60, first=10)
+    app.job_queue.run_repeating(monitor_scores, interval=3600, first=10)
     print("✅ Bot running...")
     app.run_polling()
 
