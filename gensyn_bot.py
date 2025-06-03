@@ -14,7 +14,7 @@ load_dotenv()
 TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 API_URL = "https://dashboard-math.gensyn.ai/api/v1/peer"
 DB_FILE = "gensyn_bot.db"
-ADMIN_ID = 1541361316
+ADMIN_ID = 5173961121
 
 def get_db_connection():
     return sqlite3.connect(DB_FILE)
