@@ -35,6 +35,7 @@ yarn install &&
 yarn upgrade &&
 yarn add next@latest &&
 yarn add viem@latest &&
-cd .. 
+cd .. &&
+yarn add -D pino-pretty
 #cd rl-swarm && python3 -m venv .venv && source .venv/bin/activate && ./run_rl_swarm.sh <<< $'Y\nA\n7'
 "
