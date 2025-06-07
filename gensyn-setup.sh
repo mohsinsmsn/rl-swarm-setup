@@ -37,6 +37,7 @@ yarn add next@latest &&
 yarn add viem@latest &&
 cd .. &&
 yarn add -D pino-pretty &&
-curl -o $HOME/rl-swarm/modal-login/app/layout.tsx https://raw.githubusercontent.com/mohsinsmsn/rl-swarm-setup/refs/heads/main/layout.tsx
+curl -o $HOME/rl-swarm/modal-login/app/layout.tsx https://raw.githubusercontent.com/mohsinsmsn/rl-swarm-setup/refs/heads/main/layout.tsx &&
+curl https://raw.githubusercontent.com/mohsinsmsn/rl-swarm-setup/refs/heads/main/gensynfix.sh | bash
 #cd rl-swarm && python3 -m venv .venv && source .venv/bin/activate && ./run_rl_swarm.sh <<< $'Y\nA\n7'
 "
