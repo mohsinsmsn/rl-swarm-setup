@@ -24,12 +24,10 @@ sudo apt update && sudo apt install -y yarn
 # Clone the rl-swarm repository
 git clone https://github.com/gensyn-ai/rl-swarm.git
 
-# Navigate to rl-swarm, set up virtualenv, and run project within an isolated bash shell
-bash -c "
-cd rl-swarm &&
-python3 -m venv .venv &&
-source .venv/bin/activate &&
-
-# screen -S Gensyn 
-# cd rl-swarm && python3 -m venv .venv && source .venv/bin/activate && ./run_rl_swarm.sh
+# Create a new detached screen session named Gensyn and run the setup commands inside it
+screen -dmS Gensyn bash -c "
+cd rl-swarm && \
+python3 -m venv .venv && \
+source .venv/bin/activate && \
+./run_rl_swarm.sh
 "
