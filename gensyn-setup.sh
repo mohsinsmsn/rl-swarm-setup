@@ -44,5 +44,5 @@ fi
 #"
 
 echo "✅ Gensyn setup complete."
-echo "📺 To run the node , run:  1. screen -S Gensyn  2.  cd rl-swarm &&  python3 -m venv .venv &&  source .venv/bin/activate &&  ./run_rl_swarm.sh"
+echo "📺 To run the node , run:  1. screen -S Gensyn  2.  cd rl-swarm &&  python3 -m venv .venv &&  source .venv/bin/activate 3.  ./run_rl_swarm.sh"
 echo "Run this cmd in another window : cloudflared tunnel --url http://localhost:3000"
