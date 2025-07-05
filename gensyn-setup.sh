@@ -14,12 +14,11 @@ wget -q https://github.com/cloudflare/cloudflared/releases/latest/download/cloud
 sudo dpkg -i cloudflared-linux-amd64.deb
 
 # Install Node.js
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-sudo apt update && sudo apt install -y nodejs
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - && sudo apt update && sudo apt install -y nodejs
 
 # Add Yarn package repository and install Yarn
-curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | sudo tee /usr/share/keyrings/yarnkey.gpg > /dev/null
-echo "deb [signed-by=/usr/share/keyrings/yarnkey.gpg] https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list > /dev/null
 sudo apt update && sudo apt install -y yarn
 
 # Clone the rl-swarm repository
@@ -30,16 +29,7 @@ bash -c "
 cd rl-swarm &&
 python3 -m venv .venv &&
 source .venv/bin/activate &&
-cd modal-login &&
-yarn install &&
-yarn upgrade &&
-yarn add next@latest &&
-yarn add viem@latest &&
-cd .. &&
-yarn add -D pino-pretty &&
 
-#curl -o $HOME/rl-swarm/modal-login/app/layout.tsx https://raw.githubusercontent.com/mohsinsmsn/rl-swarm-setup/refs/heads/main/layout.tsx &&
-#curl https://raw.githubusercontent.com/mohsinsmsn/rl-swarm-setup/refs/heads/main/gensynfix.sh | bash
 # screen -S Gensyn 
 # cd rl-swarm && python3 -m venv .venv && source .venv/bin/activate && ./run_rl_swarm.sh
 "
