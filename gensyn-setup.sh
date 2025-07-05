@@ -35,14 +35,14 @@ else
   git clone https://github.com/gensyn-ai/rl-swarm.git
 fi
 
-echo ">> Launching Gensyn node in a detached screen session (name: Gensyn)..."
-screen -dmS Gensyn bash -c "
-cd rl-swarm && \
-python3 -m venv .venv && \
-source .venv/bin/activate && \
-./run_rl_swarm.sh 2>&1 | tee swarm.log
-"
+#echo ">> Launching Gensyn node in a detached screen session (name: Gensyn)..."
+#screen -dmS Gensyn bash -c "
+#cd rl-swarm && \
+#python3 -m venv .venv && \
+#source .venv/bin/activate && \
+#./run_rl_swarm.sh 2>&1 | tee swarm.log
+#"
 
 echo "✅ Gensyn setup complete."
-echo "📺 To view the node logs, run: screen -r Gensyn"
-echo "💾 Log is also saved to: rl-swarm/swarm.log"
+echo "📺 To run the node , run:  cd rl-swarm && \ python3 -m venv .venv && \ source .venv/bin/activate && \ ./run_rl_swarm.sh"
+#echo "💾 Log is also saved to: rl-swarm/swarm.log"
