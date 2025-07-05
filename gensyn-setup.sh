@@ -30,17 +30,14 @@ bash -c "
 cd rl-swarm &&
 python3 -m venv .venv &&
 source .venv/bin/activate &&
-#cd modal-login &&
-#yarn install &&
-#yarn upgrade &&
-#yarn add next@latest &&
-#yarn add viem@latest &&
-#cd .. &&
-#yarn add -D pino-pretty &&
-git switch main &&
-git reset --hard &&
-git clean -fd &&
-git pull origin main &&
+cd modal-login &&
+yarn install &&
+yarn upgrade &&
+yarn add next@latest &&
+yarn add viem@latest &&
+cd .. &&
+yarn add -D pino-pretty &&
+
 #curl -o $HOME/rl-swarm/modal-login/app/layout.tsx https://raw.githubusercontent.com/mohsinsmsn/rl-swarm-setup/refs/heads/main/layout.tsx &&
 #curl https://raw.githubusercontent.com/mohsinsmsn/rl-swarm-setup/refs/heads/main/gensynfix.sh | bash
 # screen -S Gensyn 
