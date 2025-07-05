@@ -42,7 +42,7 @@ git reset --hard &&
 git clean -fd &&
 git pull origin main &&
 #curl -o $HOME/rl-swarm/modal-login/app/layout.tsx https://raw.githubusercontent.com/mohsinsmsn/rl-swarm-setup/refs/heads/main/layout.tsx &&
-curl https://raw.githubusercontent.com/mohsinsmsn/rl-swarm-setup/refs/heads/main/gensynfix.sh | bash
+#curl https://raw.githubusercontent.com/mohsinsmsn/rl-swarm-setup/refs/heads/main/gensynfix.sh | bash
 # screen -S Gensyn 
-# cd rl-swarm && python3 -m venv .venv && source .venv/bin/activate && ./run_rl_swarm.sh '
+# cd rl-swarm && python3 -m venv .venv && source .venv/bin/activate && ./run_rl_swarm.sh
 "
